@@ -35,7 +35,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/img_item_avatar"
-            android:textColor="@color/purple_700"
             android:textSize="16sp"
             android:textStyle="bold"
             android:ellipsize="end"

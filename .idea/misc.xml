@@ -9,7 +9,22 @@
         <entry key="..\:/IT-PLN/BANGKIT/fund-android/GithubSearchUsers/app/src/main/res/layout/item_row_user.xml" value="0.11730072463768115" />
         <entry key="..\:/IT-PLN/BANGKIT/fund-android/GithubSearchUsers/app/src/main/res/menu/item_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/IT-PLN/BANGKIT/fund-android/GithubSearchUsers/app/src/main/res/menu/option_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/drawable/ic_baseline_bookmark_24.xml" value="0.1525" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/drawable/ic_baseline_business_24.xml" value="0.151" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.151" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.151" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.151" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/drawable/ic_purple_favorite.xml" value="0.151" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/drawable/ic_purple_favorite_border.xml" value="0.151" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/layout/activity_detail_user.xml" value="0.18" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/layout/activity_favourite.xml" value="0.17074275362318841" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/layout/activity_main.xml" value="0.17074275362318841" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/layout/activity_setting.xml" value="0.17074275362318841" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/layout/activity_splash.xml" value="0.16802536231884058" />
         <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/layout/fragment_follows.xml" value="0.17074275362318841" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/layout/item_row_user.xml" value="0.16802536231884058" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/menu/detail_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/IT-PLN/BANGKIT/fund-android/submission/GithubSearchUsers/app/src/main/res/menu/option_menu.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

@@ -25,11 +25,8 @@ data class UserListItem(
 
 data class UserDetailResponse(
 
-	@field:SerializedName("bio")
-	val bio: String? = null,
-
 	@field:SerializedName("login")
-	val username: String? = null,
+	val username: String,
 
 	@field:SerializedName("company")
 	val company: String? = null,

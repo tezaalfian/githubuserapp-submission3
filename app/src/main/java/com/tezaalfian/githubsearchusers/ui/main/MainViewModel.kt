@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.tezaalfian.githubsearchusers.data.remote.response.UserListItem
 import com.tezaalfian.githubsearchusers.data.remote.response.UserResponse
 import com.tezaalfian.githubsearchusers.utils.Event
-import com.tezaalfian.githubusersapi.config.ApiConfig
+import com.tezaalfian.githubsearchusers.data.remote.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

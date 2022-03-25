@@ -1,4 +1,4 @@
-package com.tezaalfian.githubusersapi.service
+package com.tezaalfian.githubsearchusers.data.remote.retrofit
 
 import com.tezaalfian.githubsearchusers.BuildConfig
 import com.tezaalfian.githubsearchusers.data.remote.response.UserDetailResponse
@@ -16,9 +16,9 @@ interface ApiService {
 
     @Headers("Authorization: token ${BuildConfig.GITHUB_TOKEN}")
     @GET("users/{username}")
-    fun getUserDetail(
+    suspend fun getUserDetail(
         @Path("username") username: String
-    ): Call<UserDetailResponse>
+    ): UserDetailResponse
 
     @Headers("Authorization: token ${BuildConfig.GITHUB_TOKEN}")
     @GET("users/{username}/followers")

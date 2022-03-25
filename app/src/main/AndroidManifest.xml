@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GithubSearchUsers">
         <activity
+            android:name=".ui.splash.SplashActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SplashActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.detail.DetailUserActivity"
             android:exported="false" />
         <activity

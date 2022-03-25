@@ -1,6 +1,5 @@
-package com.tezaalfian.githubusersapi.config
+package com.tezaalfian.githubsearchusers.data.remote.retrofit
 
-import com.tezaalfian.githubusersapi.service.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

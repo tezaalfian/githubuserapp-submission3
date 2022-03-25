@@ -1,21 +1,20 @@
 package com.tezaalfian.githubsearchusers.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.tezaalfian.githubsearchusers.data.remote.response.UserDetailResponse
+import androidx.lifecycle.viewModelScope
+import com.tezaalfian.githubsearchusers.data.UsersRepository
+import com.tezaalfian.githubsearchusers.data.local.entity.UsersEntity
 import com.tezaalfian.githubsearchusers.data.remote.response.UserListItem
 import com.tezaalfian.githubsearchusers.utils.Event
-import com.tezaalfian.githubusersapi.config.ApiConfig
+import com.tezaalfian.githubsearchusers.data.remote.retrofit.ApiConfig
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailViewModel : ViewModel() {
-
-    private val _userDetail = MutableLiveData<UserDetailResponse>()
-    val userDetail: LiveData<UserDetailResponse> = _userDetail
+class DetailViewModel(private val usersRepository: UsersRepository) : ViewModel() {
 
     private val _followers = MutableLiveData<List<UserListItem>>()
     val followers: LiveData<List<UserListItem>> = _followers
@@ -63,39 +62,35 @@ class DetailViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _following.value = response.body()
                 } else {
-                    Log.e(TAG, "onFailure: gagal")
+                    _toastText.value = Event("Tidak ada data yang ditampilkan!")
                 }
             }
             override fun onFailure(call: Call<List<UserListItem>>, t: Throwable) {
                 _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
+                _toastText.value = Event("onFailure: ${t.message.toString()}")
             }
         })
     }
 
-    fun getUser(username: String) {
-        _isLoading.value = true
-        val client = ApiConfig.getApiService().getUserDetail(username)
-        client.enqueue(object : Callback<UserDetailResponse> {
-            override fun onResponse(
-                call: Call<UserDetailResponse>,
-                response: Response<UserDetailResponse>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _userDetail.value = response.body()
-                } else {
-                    Log.e(TAG, "onFailure: gagal")
-                }
-            }
-            override fun onFailure(call: Call<UserDetailResponse>, t: Throwable) {
-                _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
-            }
-        })
+    fun getUser(username: String) = usersRepository.getUser(username)
+
+    fun saveFavourite(user: UsersEntity) {
+        viewModelScope.launch {
+            usersRepository.setUsersFavourite(user, true)
+        }
     }
 
-    companion object{
-        private const val TAG = "DetailViewModel"
+    fun deleteFavourite(user: UsersEntity) {
+        viewModelScope.launch {
+            usersRepository.setUsersFavourite(user, false)
+        }
+    }
+
+    fun getFavouriteUsers() = usersRepository.getFavouriteUsers()
+
+    fun deleteAll(){
+        viewModelScope.launch {
+            usersRepository.deleteAll()
+        }
     }
 }

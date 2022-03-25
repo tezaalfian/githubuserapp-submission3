@@ -1,21 +1,25 @@
 package com.tezaalfian.githubsearchusers.ui.detail
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tezaalfian.githubsearchusers.R
-import com.tezaalfian.githubsearchusers.data.remote.response.UserDetailResponse
+import com.tezaalfian.githubsearchusers.data.Result
 import com.tezaalfian.githubsearchusers.databinding.ActivityDetailUserBinding
 
 class DetailUserActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailUserBinding
-    private val detailViewModel by viewModels<DetailViewModel>()
+    private lateinit var username: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +28,12 @@ class DetailUserActivity : AppCompatActivity() {
 
         this.title = resources.getString(R.string.app_name2)
 
-        val username = intent.getStringExtra(EXTRA_USER) as String
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
+        val detailViewModel: DetailViewModel by viewModels {
+            factory
+        }
+
+        username = intent.getStringExtra(EXTRA_USER) as String
 
         detailViewModel.getUser(username)
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
@@ -33,8 +42,53 @@ class DetailUserActivity : AppCompatActivity() {
         binding.viewPager.adapter = sectionsPagerAdapter
         supportActionBar?.elevation = 0f
 
-        detailViewModel.userDetail.observe(this) { user ->
-            setUserData(user)
+        detailViewModel.getUser(username).observe(this){ result ->
+            if (result != null){
+                when(result) {
+                    is Result.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is Result.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        val user = result.data
+                        binding.apply {
+                            tvName.text = user.name
+                            tvUsername.text = user.username
+                            tvCompany.text = user.company
+                            tvLocation.text = user.location
+                            tvRepository.text = resources.getString(R.string.repository, user.repository)
+                            if (user.isFavourite) {
+                                ivFavourite.setImageDrawable(ContextCompat.getDrawable(ivFavourite.context, R.drawable.ic_purple_favorite))
+                            } else {
+                                ivFavourite.setImageDrawable(ContextCompat.getDrawable(ivFavourite.context, R.drawable.ic_purple_favorite_border))
+                            }
+                            ivFavourite.setOnClickListener {
+                                if (user.isFavourite){
+                                    detailViewModel.deleteFavourite(user)
+                                } else {
+                                    detailViewModel.saveFavourite(user)
+                                }
+                            }
+                        }
+                        Glide.with(this)
+                            .load(user.avatar)
+                            .circleCrop()
+                            .into(binding.imgAvatar)
+                        val countFollow = arrayOf(user.following, user.followers)
+                        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
+                            tab.text = resources.getString(TAB_TITLES[position], countFollow[position])
+                        }.attach()
+                    }
+                    is Result.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(
+                            this,
+                            "Terjadi kesalahan" + result.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
 
         detailViewModel.isLoading.observe(this) {
@@ -48,20 +102,26 @@ class DetailUserActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUserData(user: UserDetailResponse) {
-        binding.tvName.text = user.name
-        binding.tvUsername.text = user.username
-        binding.tvCompany.text = user.company
-        binding.tvLocation.text = user.location
-        binding.tvRepository.text = resources.getString(R.string.repository, user.repository)
-        Glide.with(this)
-            .load(user.avatar)
-            .circleCrop()
-            .into(binding.imgAvatar)
-        val countFollow = arrayOf(user.following, user.followers)
-        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
-            tab.text = resources.getString(TAB_TITLES[position], countFollow[position])
-        }.attach()
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.detail_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.share -> {
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share, username))
+                    type = "text/plain"
+                }
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                startActivity(shareIntent)
+                true
+            }
+            else -> true
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {

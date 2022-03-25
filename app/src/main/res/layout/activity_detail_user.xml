@@ -21,6 +21,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
 
+        <ImageView
+            android:id="@+id/iv_favourite"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="-6dp"
+            android:contentDescription="@string/save_favourite"
+            android:src="@drawable/ic_purple_favorite_border"
+            android:tag="Not Saved"
+            app:layout_constraintBottom_toBottomOf="@+id/img_avatar"
+            app:layout_constraintEnd_toEndOf="@+id/img_avatar" />
+
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="0dp"
@@ -32,7 +43,6 @@
             android:textAlignment="center"
             android:textStyle="bold"
             android:textSize="24sp"
-            android:textColor="@color/purple_700"
             tools:text="@string/name"/>
 
         <TextView
@@ -82,8 +92,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_company"
-            app:tabTextColor="@android:color/holo_purple" />
+            app:layout_constraintTop_toBottomOf="@id/tv_company" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
