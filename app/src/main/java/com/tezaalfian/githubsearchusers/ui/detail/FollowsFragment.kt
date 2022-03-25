@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.tezaalfian.githubsearchusers.data.remote.response.UserListItem
 import com.tezaalfian.githubsearchusers.databinding.FragmentFollowsBinding
 import com.tezaalfian.githubsearchusers.ui.ListUserAdapter
@@ -15,21 +15,20 @@ import com.tezaalfian.githubsearchusers.ui.ListUserAdapter
 class FollowsFragment : Fragment() {
 
     private var _binding: FragmentFollowsBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
 
     private val detailViewModel: DetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): FrameLayout? {
         _binding = FragmentFollowsBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rvFollows.layoutManager = LinearLayoutManager(activity)
         when(arguments?.getInt(ARG_SECTION_NUMBER, 0)){
             1 -> {
                 detailViewModel.getFollowing(arguments?.getString(USERNAME))
@@ -44,11 +43,12 @@ class FollowsFragment : Fragment() {
                 }
             }
         }
+        binding?.rvFollows?.setHasFixedSize(true)
     }
 
     private fun setUserData(users: List<UserListItem>?) {
         val listUserAdapter = ListUserAdapter(users as ArrayList<UserListItem>)
-        binding.rvFollows.adapter = listUserAdapter
+        binding?.rvFollows?.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
             override fun onItemClicked(data: UserListItem) {
