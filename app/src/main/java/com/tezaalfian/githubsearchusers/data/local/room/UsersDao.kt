@@ -12,6 +12,9 @@ interface UsersDao {
     @Query("SELECT EXISTS(SELECT * FROM users WHERE username = :username AND favourite = 1)")
     suspend fun isUsersFavourite(username: String?): Boolean
 
+    @Query("SELECT EXISTS(SELECT * FROM users WHERE username = :username)")
+    suspend fun isUsers(username: String?): Boolean
+
     @Update
     suspend fun updateUser(users: UsersEntity)
 

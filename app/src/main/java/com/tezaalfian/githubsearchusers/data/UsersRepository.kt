@@ -47,8 +47,13 @@ class UsersRepository(
             Log.d("UsersRepository", "getUser: ${e.message.toString()} ")
             emit(Result.Error(e.message.toString()))
         }
-        val localData : LiveData<Result<UsersEntity>> = usersDao.getUser(username).map { Result.Success(it) }
-        emitSource(localData)
+        val isFavourite = usersDao.isUsers(username)
+        if(isFavourite){
+            val localData : LiveData<Result<UsersEntity>> = usersDao.getUser(username).map { Result.Success(it) }
+            emitSource(localData)
+        }else{
+            emit(Result.Error("Not Found!"))
+        }
     }
 
     companion object {

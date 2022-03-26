@@ -30,11 +30,12 @@ import com.tezaalfian.githubsearchusers.ui.setting.SettingPreferences
 import com.tezaalfian.githubsearchusers.ui.setting.SettingViewModel
 import com.tezaalfian.githubsearchusers.ui.setting.SettingViewModelFactory
 
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModels()
-    private val dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
