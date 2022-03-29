@@ -1,4 +1,4 @@
-package com.tezaalfian.githubsearchusers.ui.favorite
+package com.tezaalfian.githubsearchusers.ui.favourite
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -13,7 +13,6 @@ import com.tezaalfian.githubsearchusers.data.remote.response.UserListItem
 import com.tezaalfian.githubsearchusers.databinding.ActivityFavouriteBinding
 import com.tezaalfian.githubsearchusers.ui.ListUserAdapter
 import com.tezaalfian.githubsearchusers.ui.detail.DetailUserActivity
-import com.tezaalfian.githubsearchusers.ui.detail.DetailViewModel
 import com.tezaalfian.githubsearchusers.ui.detail.ViewModelFactory
 
 class FavouriteActivity : AppCompatActivity() {
@@ -28,10 +27,9 @@ class FavouriteActivity : AppCompatActivity() {
         this.title = resources.getString(R.string.app_name3)
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
-        val viewModel: DetailViewModel by viewModels {
+        val viewModel: FavouriteViewModel by viewModels {
             factory
         }
-        viewModel.deleteAll()
         viewModel.getFavouriteUsers().observe(this) { user ->
             binding.progressBar.visibility = View.GONE
             val userList = user.map {

@@ -7,19 +7,22 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tezaalfian.githubsearchusers.R
 import com.tezaalfian.githubsearchusers.data.Result
+import com.tezaalfian.githubsearchusers.data.local.entity.UsersEntity
 import com.tezaalfian.githubsearchusers.databinding.ActivityDetailUserBinding
+import com.tezaalfian.githubsearchusers.ui.favourite.FavouriteViewModel
 
 class DetailUserActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailUserBinding
     private lateinit var username: String
+    private lateinit var favouriteViewModel : FavouriteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,20 +32,18 @@ class DetailUserActivity : AppCompatActivity() {
         this.title = resources.getString(R.string.app_name2)
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
-        val detailViewModel: DetailViewModel by viewModels {
-            factory
-        }
+        favouriteViewModel = ViewModelProvider(this, factory)[FavouriteViewModel::class.java]
 
         username = intent.getStringExtra(EXTRA_USER) as String
 
-        detailViewModel.getUser(username)
+        favouriteViewModel.getUser(username)
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
         sectionsPagerAdapter.username = username
 
         binding.viewPager.adapter = sectionsPagerAdapter
         supportActionBar?.elevation = 0f
 
-        detailViewModel.getUser(username).observe(this){ result ->
+        favouriteViewModel.getUser(username).observe(this){ result ->
             if (result != null){
                 when(result) {
                     is Result.Loading -> {
@@ -51,33 +52,7 @@ class DetailUserActivity : AppCompatActivity() {
                     is Result.Success -> {
                         binding.progressBar.visibility = View.GONE
                         val user = result.data
-                        binding.apply {
-                            tvName.text = user.name
-                            tvUsername.text = user.username
-                            tvCompany.text = user.company
-                            tvLocation.text = user.location
-                            tvRepository.text = resources.getString(R.string.repository, user.repository)
-                            if (user.isFavourite) {
-                                ivFavourite.setImageDrawable(ContextCompat.getDrawable(ivFavourite.context, R.drawable.ic_purple_favorite))
-                            } else {
-                                ivFavourite.setImageDrawable(ContextCompat.getDrawable(ivFavourite.context, R.drawable.ic_purple_favorite_border))
-                            }
-                            ivFavourite.setOnClickListener {
-                                if (user.isFavourite){
-                                    detailViewModel.deleteFavourite(user)
-                                } else {
-                                    detailViewModel.saveFavourite(user)
-                                }
-                            }
-                        }
-                        Glide.with(this)
-                            .load(user.avatar)
-                            .circleCrop()
-                            .into(binding.imgAvatar)
-                        val countFollow = arrayOf(user.following, user.followers)
-                        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
-                            tab.text = resources.getString(TAB_TITLES[position], countFollow[position])
-                        }.attach()
+                        setUserData(user)
                     }
                     is Result.Error -> {
                         binding.progressBar.visibility = View.GONE
@@ -90,16 +65,37 @@ class DetailUserActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
-        detailViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-
-        detailViewModel.toastText.observe(this) {
-            it.getContentIfNotHandled()?.let { toastText ->
-                Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
+    private fun setUserData(user: UsersEntity) {
+        binding.apply {
+            tvName.text = user.name
+            tvUsername.text = user.username
+            tvCompany.text = user.company
+            tvLocation.text = user.location
+            tvRepository.text = resources.getString(R.string.repository, user.repository)
+            ivFavourite.setImageDrawable(
+                ContextCompat.getDrawable(ivFavourite.context,
+                    if (user.isFavourite) R.drawable.ic_purple_favorite
+                    else R.drawable.ic_purple_favorite_border
+                )
+            )
+            ivFavourite.setOnClickListener {
+                if (user.isFavourite){
+                    favouriteViewModel.deleteFavourite(user)
+                } else {
+                    favouriteViewModel.saveFavourite(user)
+                }
             }
         }
+        Glide.with(this)
+            .load(user.avatar)
+            .circleCrop()
+            .into(binding.imgAvatar)
+        val countFollow = arrayOf(user.following, user.followers)
+        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
+            tab.text = resources.getString(TAB_TITLES[position], countFollow[position])
+        }.attach()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -122,10 +118,6 @@ class DetailUserActivity : AppCompatActivity() {
             }
             else -> true
         }
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     companion object {

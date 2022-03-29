@@ -17,10 +17,6 @@ class UsersRepository(
         return usersDao.getFavouriteUsers()
     }
 
-    suspend fun deleteAll() {
-        usersDao.deleteAll()
-    }
-
     suspend fun setUsersFavourite(user: UsersEntity, favouriteState: Boolean){
         user.isFavourite = favouriteState
         usersDao.updateUser(user)
@@ -30,7 +26,8 @@ class UsersRepository(
         emit(Result.Loading)
         try {
             val user = apiService.getUserDetail(username)
-            val isFavourite = usersDao.isUsersFavourite(user.username)
+            val isFavourite = usersDao.isUserFavourite(user.username)
+            usersDao.deleteAll()
             usersDao.delete(user.username)
             usersDao.insertUser(UsersEntity(
                 user.username,
@@ -47,7 +44,7 @@ class UsersRepository(
             Log.d("UsersRepository", "getUser: ${e.message.toString()} ")
             emit(Result.Error(e.message.toString()))
         }
-        val isFavourite = usersDao.isUsers(username)
+        val isFavourite = usersDao.isUser(username)
         if(isFavourite){
             val localData : LiveData<Result<UsersEntity>> = usersDao.getUser(username).map { Result.Success(it) }
             emitSource(localData)

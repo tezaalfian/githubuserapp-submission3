@@ -5,13 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.tezaalfian.githubsearchusers.data.UsersRepository
 import com.tezaalfian.githubsearchusers.di.Injection
+import com.tezaalfian.githubsearchusers.ui.favourite.FavouriteViewModel
 
 class ViewModelFactory private constructor(private val usersRepository: UsersRepository) :
     ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
-            return DetailViewModel(usersRepository) as T
+        if (modelClass.isAssignableFrom(FavouriteViewModel::class.java)) {
+            return FavouriteViewModel(usersRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

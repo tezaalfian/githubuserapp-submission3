@@ -18,7 +18,7 @@ abstract class UsersDatabase : RoomDatabase() {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     UsersDatabase::class.java, "Github.db"
-                ).build()
+                ).build().apply { instance = this }
             }
     }
 }

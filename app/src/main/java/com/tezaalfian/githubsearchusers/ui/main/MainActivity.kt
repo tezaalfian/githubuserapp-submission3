@@ -24,7 +24,7 @@ import com.tezaalfian.githubsearchusers.data.remote.response.UserListItem
 import com.tezaalfian.githubsearchusers.databinding.ActivityMainBinding
 import com.tezaalfian.githubsearchusers.ui.ListUserAdapter
 import com.tezaalfian.githubsearchusers.ui.detail.DetailUserActivity
-import com.tezaalfian.githubsearchusers.ui.favorite.FavouriteActivity
+import com.tezaalfian.githubsearchusers.ui.favourite.FavouriteActivity
 import com.tezaalfian.githubsearchusers.ui.setting.SettingActivity
 import com.tezaalfian.githubsearchusers.ui.setting.SettingPreferences
 import com.tezaalfian.githubsearchusers.ui.setting.SettingViewModel

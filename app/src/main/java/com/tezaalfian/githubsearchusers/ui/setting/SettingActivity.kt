@@ -1,6 +1,5 @@
 package com.tezaalfian.githubsearchusers.ui.setting
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.CompoundButton
