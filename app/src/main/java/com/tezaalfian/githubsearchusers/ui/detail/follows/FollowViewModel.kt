@@ -1,21 +1,16 @@
-package com.tezaalfian.githubsearchusers.ui.detail
+package com.tezaalfian.githubsearchusers.ui.detail.follows
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.tezaalfian.githubsearchusers.data.UsersRepository
-import com.tezaalfian.githubsearchusers.data.local.entity.UsersEntity
 import com.tezaalfian.githubsearchusers.data.remote.response.UserListItem
-import com.tezaalfian.githubsearchusers.utils.Event
 import com.tezaalfian.githubsearchusers.data.remote.retrofit.ApiConfig
-import kotlinx.coroutines.launch
+import com.tezaalfian.githubsearchusers.utils.Event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailViewModel(private val usersRepository: UsersRepository) : ViewModel() {
-
+class FollowViewModel : ViewModel() {
     private val _followers = MutableLiveData<List<UserListItem>>()
     val followers: LiveData<List<UserListItem>> = _followers
 
@@ -70,27 +65,5 @@ class DetailViewModel(private val usersRepository: UsersRepository) : ViewModel(
                 _toastText.value = Event("onFailure: ${t.message.toString()}")
             }
         })
-    }
-
-    fun getUser(username: String) = usersRepository.getUser(username)
-
-    fun saveFavourite(user: UsersEntity) {
-        viewModelScope.launch {
-            usersRepository.setUsersFavourite(user, true)
-        }
-    }
-
-    fun deleteFavourite(user: UsersEntity) {
-        viewModelScope.launch {
-            usersRepository.setUsersFavourite(user, false)
-        }
-    }
-
-    fun getFavouriteUsers() = usersRepository.getFavouriteUsers()
-
-    fun deleteAll(){
-        viewModelScope.launch {
-            usersRepository.deleteAll()
-        }
     }
 }
